@@ -55,6 +55,7 @@ const Resorts = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [resorts, setResorts] = useState<Resort[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -63,6 +64,10 @@ const Resorts = () => {
         const response = await api.hotels.list();
         if (isMounted) {
           setResorts(response);
+        }
+      } catch {
+        if (isMounted) {
+          setError('Failed to load resorts. Please try again.');
         }
       } finally {
         if (isMounted) {
@@ -362,6 +367,9 @@ const Resorts = () => {
             )}
 
             {/* Results Grid */}
+            {error && (
+              <div className="mb-6 text-sm text-red-600">{error}</div>
+            )}
             {isLoading ? (
               <div className="text-center py-20 text-muted-foreground">Loading resorts...</div>
             ) : filteredResorts.length > 0 ? (

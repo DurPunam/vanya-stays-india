@@ -8,6 +8,7 @@ import type { Destination } from '@/types';
 const Destinations = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -16,6 +17,10 @@ const Destinations = () => {
         const response = await api.destinations.list();
         if (isMounted) {
           setDestinations(response);
+        }
+      } catch {
+        if (isMounted) {
+          setError('Failed to load destinations. Please try again.');
         }
       } finally {
         if (isMounted) {
@@ -34,6 +39,11 @@ const Destinations = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-24">
+        {error && (
+          <div className="container mx-auto px-4 lg:px-8 mb-6 text-sm text-red-600">
+            {error}
+          </div>
+        )}
         <DestinationsGrid destinations={destinations} isLoading={isLoading} />
       </div>
       <Footer />

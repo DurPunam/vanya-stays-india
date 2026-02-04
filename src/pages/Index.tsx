@@ -12,6 +12,7 @@ const Index = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [resorts, setResorts] = useState<Resort[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -24,6 +25,10 @@ const Index = () => {
         if (isMounted) {
           setDestinations(destinationsResponse);
           setResorts(hotelsResponse);
+        }
+      } catch {
+        if (isMounted) {
+          setError('Failed to load homepage data. Please try again.');
         }
       } finally {
         if (isMounted) {
@@ -42,6 +47,11 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <HeroSection />
+      {error && (
+        <div className="container mx-auto px-4 lg:px-8 mb-6 text-sm text-red-600">
+          {error}
+        </div>
+      )}
       <DestinationsGrid destinations={destinations} isLoading={isLoading} />
       <TrendingStays resorts={resorts} isLoading={isLoading} />
       <WhyVanyaStays />

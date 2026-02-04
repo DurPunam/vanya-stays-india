@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.get("/", getDestinations);
-router.get("/:id", getDestinationById);
 router.get("/:id/hotels", getHotelsByDestination);
+router.get("/:id", getDestinationById);
 
 export default router;
