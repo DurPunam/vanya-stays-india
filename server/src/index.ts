@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import path from "path";
+import fs from "fs";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
 import destinationRoutes from "./routes/destinationRoutes";
@@ -36,6 +37,15 @@ app.use("/api/destinations", destinationRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/reviews", reviewRoutes);
+
+const frontendDistPath = path.resolve(process.cwd(), "..", "dist");
+const frontendIndexPath = path.join(frontendDistPath, "index.html");
+if (fs.existsSync(frontendIndexPath)) {
+  app.use(express.static(frontendDistPath));
+  app.get("*", (_req, res) => {
+    res.sendFile(frontendIndexPath);
+  });
+}
 
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -1,6 +1,6 @@
 import type { Booking, Destination, Resort, Review } from "@/types";
 
-const API_BASE = "/api";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 class ApiError extends Error {
   status: number;
